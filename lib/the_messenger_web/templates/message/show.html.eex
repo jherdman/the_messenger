@@ -1,0 +1,23 @@
+<h1>Show Message</h1>
+
+<ul>
+
+  <li>
+    <strong>From:</strong>
+    <%= @message.from %>
+  </li>
+
+  <li>
+    <strong>Body:</strong>
+    <%= @message.body %>
+  </li>
+
+  <li>
+    <strong>Sent at:</strong>
+    <%= @message.sent_at %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.message_path(@conn, :edit, @message) %></span>
+<span><%= link "Back", to: Routes.message_path(@conn, :index) %></span>
