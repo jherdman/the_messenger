@@ -24,21 +24,27 @@ defmodule TheMessengerWeb.RoomChannel do
 
     serialized_message = serialize_message(message)
 
-    broadcast!(socket, "new:msg", serialized_message)
+    broadcast!(socket, "new:msg", %{"data" => serialized_message})
 
     {:noreply, socket}
   end
 
+  def handle_in("query:msgs", _params, socket) do
+    messages = NewsFeed.list_messages()
+
+    serialized_messages = Enum.map(messages, &serialize_message/1)
+
+    {:reply, {:ok, %{"data" => serialized_messages}}, socket}
+  end
+
   defp serialize_message(message) do
     %{
-      "data" => %{
-        "id" => message.id,
-        "type" => "message",
-        "attributes" => %{
-          "from" => message.from,
-          "body" => message.body,
-          "sentAt" => message.sent_at,
-        }
+      "id" => message.id,
+      "type" => "message",
+      "attributes" => %{
+        "from" => message.from,
+        "body" => message.body,
+        "sentAt" => message.sent_at,
       }
     }
   end
